@@ -1,0 +1,32 @@
+Drills need to cover
+
+Arrays
+Numbers
+Strings
+
+fetch from API
+Promises
+Async / Await
+
+Drill 1:
+
+Given an input array and a smaller array of indices, return an array of arrays, where the subarrays are the 3 elements starting at each of the indices in the indices array.
+
+Drill 2:
+
+Given two strings, find if one is a substring of the other. If it is, return all indices at which the substring occurs.
+
+
+Drill 3:
+
+Return the squarert of the cube of a number, to 2 decimal points, tamped down to 10 if lower than 10.
+
+
+Drill 4:
+
+Fetch a pokemon from the pokemon API, then wait for user to type y or anything else before fetching the next one. After 10 such pokemon, publish a list of all the ones that the user typed 'y' in.
+
+
+Drill 5:
+
+fetch 10 pokemon serially, then fetch them parallely, then compare the timing of each.
