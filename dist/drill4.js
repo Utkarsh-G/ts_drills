@@ -25,19 +25,48 @@ function fetchPokemon(id) {
         //     .then(data => console.log(data.name))
         const pokemonSelected = [];
         const rl = promises_1.default.createInterface({ input: process_1.stdin, output: process_1.stdout });
-        for (let i = 3; i < 5; i++) {
-            const response = yield fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
-            const json = yield response.json();
-            console.log(json.name);
-            const pokemonFound = json.name;
-            const select = yield rl.question(`Do you want to select ${pokemonFound}?`);
-            if (select.match(/^(?:yes)|y$/i)) {
-                console.log(`Okay, keeping ${pokemonFound}.`);
-                pokemonSelected.push(pokemonFound);
+        // // async await solution, with loop
+        // for (let i = 3; i < 5; i++){
+        //     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
+        //     const json = await response.json();
+        //     console.log(json.name);
+        //     const pokemonFound = json.name;
+        //     const select = await rl.question(`Do you want to select ${pokemonFound}?`);
+        //     if (select.match(/^(?:yes)|y$/i)) {
+        //         console.log (`Okay, keeping ${pokemonFound}.`);
+        //         pokemonSelected.push(pokemonFound);
+        //     }
+        // }
+        // async await with generator. Good for lazy loading?
+        const pokemonGenerator = fetchPokemonRange(5, 12);
+        let result = pokemonGenerator.next();
+        while (!result.done) {
+            try {
+                const pokemonFound = yield result.value;
+                //console.log(`pokemonFound: `)
+                //console.log(pokemonFound)
+                if (typeof (pokemonFound === null || pokemonFound === void 0 ? void 0 : pokemonFound.name) === "string") {
+                    const select = yield rl.question(`Do you want to select ${pokemonFound.name}?`);
+                    if (select.match(/^(?:yes)|y$/i)) {
+                        console.log(`Okay, keeping ${pokemonFound.name}.`);
+                        pokemonSelected.push(pokemonFound.name);
+                    }
+                }
+                result = pokemonGenerator.next();
+            }
+            catch (error) {
+                console.error("Error fetching user:'", error);
+                result = pokemonGenerator.next();
             }
         }
         rl.close();
         console.log(`Selected pokemon: ${pokemonSelected}`);
     });
+}
+function* fetchPokemonRange(startID, endID) {
+    for (let i = startID; i <= endID; i++) {
+        yield fetch(`https://pokeapi.co/api/v2/pokemon/${i}`).then(response => response.json());
+        // I thought I was returning a promise, but instead I'm returning the generator. right, right.
+    }
 }
 fetchPokemon(2);
