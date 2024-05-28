@@ -10,6 +10,7 @@ class ListNode {
 }
 exports.ListNode = ListNode;
 // Extremely functional approach.
+// Recursion, maps, curried functions. Not even a variable number or string.
 function mergeTwoLists(list1, list2) {
     if (list1 === null) {
         return list2;
